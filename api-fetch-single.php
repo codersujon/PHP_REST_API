@@ -1,7 +1,10 @@
 <?php 
-
+    ## Return JSON Encoded String
     header("Content-Type: application/json");
+    ## For Allow Access to All devices
     header("Access-Control-Allow-Origin: *");
+    
+    ## Database Connection
     include_once("./config.php");
 
     ## For Reading JSON Data and Decode into Associative Array

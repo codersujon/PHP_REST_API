@@ -1,7 +1,11 @@
 <?php 
 
+   ## Return JSON Encoded String
    header("Content-Type: application/json");
+   ## For Allow Access to All devices
    header("Access-Control-Allow-Origin: *");
+   
+   ## Database Connection
    require_once("./config.php");
 
    $q = mysqli_query($con, "SELECT * FROM students") or die("SQL Query Failed");
