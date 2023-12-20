@@ -2,13 +2,13 @@
 
     header("Content-Type: application/json"); 
     header("Access-Control-Allow-Origin: *"); 
-    header("Access-Control-Allow-Methods: POST");
+    header("Access-Control-Allow-Methods: PUT");
     header("Access-Control-Allow-headers: Access-Control-Allow-headers, Content-Type, Access-Control-Allow-Methods, Authorization, X-Requested-With");
 
     include_once("./config.php");
 
     $data = json_decode(file_get_contents("php://input"), true);
-
+    ## Which id to be update
     $sid =  $data['sid'];
     $student_name =  $data['sName'];
     $student_age =  $data['sAge'];
@@ -27,5 +27,5 @@
             "status"=> false
         ));
     }
-    
+
 ?>
