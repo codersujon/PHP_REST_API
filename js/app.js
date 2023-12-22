@@ -214,5 +214,44 @@ $(document).ready(function(){
      });
 
 
+     /**
+      * Live Record Search
+      */
 
+     $(document).on("keyup", "#search", function(){
+        let search_term = $(this).val();
+
+        // For load Blank then ajax content
+        $("#load-table").html("");
+
+        $.ajax({
+            url: 'http://localhost/api/api-search.php?search=' + search_term,
+            type: "GET",
+            success: function(data){
+                if(data.status == false){
+                    $("#load-table").append(`
+                        <tr>
+                            <td colspan='6' align="center">
+                                <p>${data.message}</p>
+                            </td>
+                        </tr>
+                    `);
+                }else{
+                   $.each(data, function(key, value){
+                        $("#load-table").append(`
+                            <tr>
+                                <td>${key+1}</td>
+                                <td>${value.student_name}</td>
+                                <td>${value.age}</td>
+                                <td>${value.city}</td>
+                                <td><button class="edit-btn" data-eid="${value.id}">Edit</button></td>
+                                <td><button class="delete-btn" data-id="${value.id}">Delete</button></td>
+                            </tr>
+                        `);
+                   }); 
+                }
+            }
+        });
+
+     });
 })
