@@ -11,7 +11,13 @@ $(document).ready(function(){
             type: "GET",
             success: function(data){
                 if(data.status == false){
-                    $("#load-table").append("<tr><td colspan='6'><h2>"+ data.message +"</h2></td></tr>");
+                    $("#load-table").append(`
+                        <tr>
+                            <td colspan='6' align="center">
+                                <p>${data.message}</p>
+                            </td>
+                        </tr>
+                    `);
                 }else{
                    $.each(data, function(key, value){
                         $("#load-table").append(`
@@ -179,5 +185,34 @@ $(document).ready(function(){
  
          }
      });
+
+     /**
+      * Record Delete
+      */
+
+     $(document).on("click", ".delete-btn", function(){
+        if(confirm("Do you really want to delete this record?")){
+            let studentID = $(this).data("id");
+            let obj = {sid: studentID};
+            let myJSON = JSON.stringify(obj);
+
+            let row = this;
+
+            $.ajax({
+                url: 'http://localhost/api/api-delete.php',
+                type: "POST",
+                data: myJSON,
+                success: function(data){
+                    Message(data.message, data.status);
+                    if(data.status == true){
+                        // loadTable();
+                        $(row).closest("tr").fadeOut(100);
+                    }
+                }
+            });
+        };
+     });
+
+
 
 })
