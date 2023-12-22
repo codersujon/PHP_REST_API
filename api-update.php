@@ -10,9 +10,9 @@
     $data = json_decode(file_get_contents("php://input"), true);
     ## Which id to be update
     $sid =  $data['sid'];
-    $student_name =  $data['sName'];
-    $student_age =  $data['sAge'];
-    $student_city =  $data['sCity'];
+    $student_name =  $data['sname'];
+    $student_age =  $data['sage'];
+    $student_city =  $data['scity'];
 
     $sql = "UPDATE `students` SET `student_name`='$student_name',`age`='$student_age',`city`='$student_city' WHERE `id`='$sid'";
 

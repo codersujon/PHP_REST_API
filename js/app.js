@@ -5,6 +5,7 @@ $(document).ready(function(){
 
     loadTable();
     function loadTable(){
+        $("#load-table").html("");
         $.ajax({
             url: "http://localhost/api/api-fetch-all.php",
             type: "GET",
@@ -64,5 +65,119 @@ $(document).ready(function(){
     $(document).on("click", "#close-btn", function(){
         $("#modal").hide();
     });
+
+
+    /**
+     * Success or Error Message Show
+     */
+
+    function Message(msg, status){
+
+        if(status == true){
+            $("#success-message").html(msg).slideDown();
+            $("#error-message").slideUp();
+
+            //Success message hide after 4s
+            setTimeout(function(){
+                $("#success-message").slideUp();
+            }, 4000);
+
+        }else if(status == false){
+            $("#error-message").html(msg).slideDown();
+            $("#success-message").slideUp();
+
+            //Error message hide after 4s
+            setTimeout(function(){
+                $("#error-message").slideUp();
+            }, 4000);
+        }
+
+    }
+
+    /**
+     * Function for form data to JSON Object
+     */
+
+    function jsonData(targetForm){
+
+        //get data as serialize Array
+        var arr = $(targetForm).serializeArray(); 
+        let obj = {}; // Object Initialize
+
+        // Convert into JS Object
+        for(var a = 0; a<arr.length; a++){
+
+            if(arr[a].value == ""){
+                return false;
+            }
+
+            obj[arr[a].name] = arr[a].value;
+        }
+        // Convert into JSON Object
+        let json_String = JSON.stringify(obj);
+
+        return json_String;
+    }
+
+    /**
+     * Insert New Record
+     */
+
+    $("#save-button").on("click", function(e){
+       e.preventDefault();
+
+        var jsonObj = jsonData("#addForm");
+
+        if(jsonObj == false){
+            Message("All Fields are required.", false);
+        }else{
+
+            $.ajax({
+                url: 'http://localhost/api/api-insert.php',
+                type: "POST",
+                data: jsonObj,
+
+                success: function(data){
+                    Message(data.message, data.status);
+                    if(data.status == true){
+                        loadTable();
+                        $("#addForm").trigger("reset");
+                    }
+                }
+            });
+
+        }
+    });
+
+    /**
+     * Update Record
+     */
+
+    $("#edit-submit").on("click", function(e){
+        e.preventDefault();
+ 
+         var jsonObj = jsonData("#edit-form");
+ 
+         if(jsonObj == false){
+             Message("All Fields are required.", false);
+         }else{
+ 
+             $.ajax({
+                 url: 'http://localhost/api/api-update.php',
+                 type: "POST",
+                 data: jsonObj,
+ 
+                 success: function(data){
+                     Message(data.message, data.status);
+                     if(data.status == true){
+                        $("#modal").hide();
+                         loadTable();
+                         $("#edit-form").trigger("reset");
+                     }
+                 }
+             });
+ 
+         }
+     });
 
 })
